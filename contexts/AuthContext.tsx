@@ -57,9 +57,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         if (savedUsers) {
-            setUsers(JSON.parse(savedUsers));
+            const parsedUsers: User[] = JSON.parse(savedUsers);
+            // Force update admin-1 to new security credentials if it exists
+            const updatedUsers = parsedUsers.map(u =>
+                u.id === 'admin-1' ? { ...u, name: 'Admin23', email: 'admin23' } : u
+            );
+            setUsers(updatedUsers);
+            localStorage.setItem('allUsers', JSON.stringify(updatedUsers));
         } else {
-            // Create default admin if no users exist or update existing stale admin
+            // Create default admin if no users exist
             const defaultAdmin: User = {
                 id: 'admin-1',
                 name: 'Admin23',
@@ -68,19 +74,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 activities: [],
                 createdAt: new Date().toISOString(),
             };
-
-            if (!savedUsers) {
-                setUsers([defaultAdmin]);
-                localStorage.setItem('allUsers', JSON.stringify([defaultAdmin]));
-            } else {
-                const parsedUsers: User[] = JSON.parse(savedUsers);
-                // Force update admin-1 to new security credentials if it exists
-                const updatedUsers = parsedUsers.map(u => 
-                    u.id === 'admin-1' ? { ...u, name: 'Admin23', email: 'admin23' } : u
-                );
-                setUsers(updatedUsers);
-                localStorage.setItem('allUsers', JSON.stringify(updatedUsers));
-            }
+            setUsers([defaultAdmin]);
+            localStorage.setItem('allUsers', JSON.stringify([defaultAdmin]));
         }
     }, []);
 
