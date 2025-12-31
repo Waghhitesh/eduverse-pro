@@ -59,17 +59,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (savedUsers) {
             setUsers(JSON.parse(savedUsers));
         } else {
-            // Create default admin if no users exist
+            // Create default admin if no users exist or update existing stale admin
             const defaultAdmin: User = {
                 id: 'admin-1',
-                name: 'Kilogram',
-                email: 'kilogram', // Using 'kilogram' as identifier
+                name: 'Admin23',
+                email: 'admin23', // Admin identifier
                 role: 'admin',
                 activities: [],
                 createdAt: new Date().toISOString(),
             };
-            setUsers([defaultAdmin]);
-            localStorage.setItem('allUsers', JSON.stringify([defaultAdmin]));
+
+            if (!savedUsers) {
+                setUsers([defaultAdmin]);
+                localStorage.setItem('allUsers', JSON.stringify([defaultAdmin]));
+            } else {
+                const parsedUsers: User[] = JSON.parse(savedUsers);
+                // Force update admin-1 to new security credentials if it exists
+                const updatedUsers = parsedUsers.map(u => 
+                    u.id === 'admin-1' ? { ...u, name: 'Admin23', email: 'admin23' } : u
+                );
+                setUsers(updatedUsers);
+                localStorage.setItem('allUsers', JSON.stringify(updatedUsers));
+            }
         }
     }, []);
 
@@ -83,9 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (foundUser) {
             // Check for specific admin credentials requested by user
             if (foundUser.role === 'admin') {
-                if (foundUser.name === 'Kilogram' && password === 'Kohli@143') {
-                    // Success
-                } else if (foundUser.email === emailOrUsername && password === 'Kohli@143') { // Support previous admin login if updated
+                if (foundUser.name === 'Admin23' && password === 'Dhoni@45') {
                     // Success
                 } else {
                     return false;

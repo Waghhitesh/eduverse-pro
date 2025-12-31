@@ -64,20 +64,7 @@ export default function LoginPage({ onNavigate, onSuccess }: {
                         </div>
                     )}
 
-                    {/* Admin Credentials */}
-                    <div className="mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200">
-                        <p className="text-sm font-semibold text-blue-900 mb-2">Admin Credentials:</p>
-                        <div className="text-sm text-blue-800 space-y-1">
-                            <p>
-                                👤 <strong>Username:</strong> Kilogram
-                            </p>
-                            <p>
-                                🔑 <strong>Password:</strong> Kohli@143
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Form */}
+                    {/* Login Form */}
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div>
                             <label className="block text-sm font-medium mb-2">Email or Username</label>
@@ -87,7 +74,7 @@ export default function LoginPage({ onNavigate, onSuccess }: {
                                     type="text"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Kilogram or student@example.com"
+                                    placeholder="Enter your email or username"
                                     className="input-field pl-11 w-full"
                                 />
                             </div>
